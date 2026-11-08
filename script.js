@@ -175,7 +175,7 @@
         const pinPopupClose = document.getElementById('pin-popup-close');
 
         // DEFAULT PIN: Silakan ubah angka ini jika ingin PIN lain
-        const SECRET_PIN = "0404";
+        const SECRET_PIN = "0417";
 
         let pinAttempt = 0;
         let popupTimeout = null;
@@ -369,64 +369,33 @@
 })();
 
 // ==========================================
-// 1. FUNGSI FOTO MEMBESAR (LIGHTBOX) & PEMUTAR MUSIK
+// 1. FUNGSI FOTO MEMBESAR (LIGHTBOX)
 // ==========================================
 document.addEventListener("DOMContentLoaded", function () {
-    const daftarFoto = document.querySelectorAll('.gallery-scroll img, .polaroid, .planet-card');
+    const daftarFoto = document.querySelectorAll('.gallery-scroll img, .polaroid');
     const modal = document.getElementById('image-modal');
     const modalImg = document.getElementById('modal-img');
-    const modalIframe = document.getElementById('modal-iframe'); // Panggil elemen iframe
+    const modalIframe = document.getElementById('modal-iframe');
     const modalCaption = document.getElementById('modal-caption');
 
     if (daftarFoto.length > 0 && modal && modalImg) {
         daftarFoto.forEach(foto => {
             foto.addEventListener('click', function () {
-
-                // Reset layar setiap kali diklik
                 if (modalCaption) modalCaption.innerText = "";
-                modalImg.style.display = 'block'; // Tampilkan foto sebagai default
-                modalIframe.style.display = 'none'; // Sembunyikan musik sebagai default
-                modalIframe.src = ""; // Kosongkan lagu sebelumnya
-
-                // A. JIKA YANG DIKLIK ADALAH KARTU LAGU/VIDEO (Punya data-embed)
-                if (this.classList.contains('planet-card') && this.hasAttribute('data-embed')) {
-                    modalImg.style.display = 'none'; // Sembunyikan foto
-                    modalIframe.style.display = 'block'; // Tampilkan alat musik/video
-
-                    const embedUrl = this.getAttribute('data-embed');
-                    modalIframe.src = embedUrl; // Masukkan link
-
-                    // Hapus class lama
-                    modalIframe.classList.remove('iframe-spotify', 'iframe-youtube', 'iframe-facebook');
-
-                    // Deteksi platform untuk penyesuaian rasio (16:9 untuk YouTube, Kotak untuk Spotify, 9:16 untuk Facebook)
-                    if (embedUrl.includes('youtube.com') || embedUrl.includes('youtu.be')) {
-                        modalIframe.classList.add('iframe-youtube');
-                    } else if (embedUrl.includes('spotify.com')) {
-                        modalIframe.classList.add('iframe-spotify');
-                    } else if (embedUrl.includes('facebook.com')) {
-                        modalIframe.classList.add('iframe-facebook');
-                    }
-
-                    const customCaption = this.getAttribute('data-caption');
-                    const teksCaption = customCaption ? customCaption : this.querySelector('.planet-caption').innerText;
-                    if (modalCaption) modalCaption.innerText = teksCaption;
+                modalImg.style.display = 'block';
+                modalImg.style.objectFit = '';
+                if (modalIframe) {
+                    modalIframe.style.display = 'none';
+                    modalIframe.src = "";
                 }
-                // B. JIKA YANG DIKLIK ADALAH KARTU 3D BIASA (Bukan Lagu)
-                else if (this.classList.contains('planet-card')) {
+
+                // JIKA YANG DIKLIK ADALAH POLAROID
+                if (this.classList.contains('polaroid')) {
                     modalImg.src = this.querySelector('img').src;
                     modalImg.style.aspectRatio = "3 / 4";
-
-                    const customCaption = this.getAttribute('data-caption');
-                    const teksCaption = customCaption ? customCaption : this.querySelector('.planet-caption').innerText;
-                    if (modalCaption) modalCaption.innerText = teksCaption;
+                    modalImg.style.objectFit = "cover";
                 }
-                // C. JIKA YANG DIKLIK ADALAH POLAROID
-                else if (this.classList.contains('polaroid')) {
-                    modalImg.src = this.querySelector('img').src;
-                    modalImg.style.aspectRatio = "1 / 1";
-                }
-                // D. JIKA YANG DIKLIK ADALAH GALERI CINTA
+                // JIKA YANG DIKLIK ADALAH GALERI CINTA
                 else {
                     modalImg.src = this.src;
                     modalImg.style.aspectRatio = "9 / 16";
@@ -434,6 +403,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 modal.classList.add('show-modal');
             });
+        });
+    }
+
+    // Tombol perbesar foto di kartu favorite Mie Gacoan
+    const favZoomBtn = document.getElementById('fav-zoom-btn');
+    if (favZoomBtn && modal && modalImg) {
+        favZoomBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            if (modalCaption) modalCaption.innerText = "Mie Gacoan 🍜";
+            if (modalIframe) {
+                modalIframe.style.display = 'none';
+                modalIframe.src = "";
+            }
+            modalImg.src = "img/favorite-food.jpg";
+            modalImg.style.display = 'block';
+            modalImg.style.aspectRatio = "auto";
+            modalImg.style.objectFit = "contain";
+            modal.classList.add('show-modal');
         });
     }
 
@@ -451,12 +438,308 @@ function tutupModal() {
 
     if (modal) {
         modal.classList.remove('show-modal');
-        // KUNCI PENTING: Mengosongkan src agar lagu berhenti berputar saat ditutup
         if (modalIframe) {
             modalIframe.src = "";
         }
     }
 }
+
+// ==========================================
+// 1B. KARTU FAVORITE INTERAKTIF (MIE GACOAN 3D FLIP)
+// ==========================================
+document.addEventListener("DOMContentLoaded", function () {
+    const favShowcase = document.getElementById('fav-showcase');
+    const favStage = document.getElementById('fav-card-stage');
+    const favTilt = document.getElementById('fav-card-tilt');
+    const favInner = document.getElementById('fav-card-inner');
+    const favGlare = document.getElementById('fav-card-glare');
+    const favFlipBackBtn = document.getElementById('fav-flip-back-btn');
+    const spiceButtons = document.querySelectorAll('.spice-btn');
+    const spiceReaction = document.getElementById('spice-reaction');
+    const toppingChips = document.querySelectorAll('.topping-chip');
+    const favTreatBtn = document.getElementById('fav-treat-btn');
+    const favOrderStatus = document.getElementById('fav-order-status');
+    const dateInput = document.getElementById('gacoan-date');
+    const timeInput = document.getElementById('gacoan-time');
+    const receiptOverlay = document.getElementById('gacoan-receipt-overlay');
+    const receiptDateVal = document.getElementById('receipt-date-val');
+    const receiptTimeVal = document.getElementById('receipt-time-val');
+    const receiptItemsList = document.getElementById('receipt-items-list');
+    const receiptCloseBtn = document.getElementById('receipt-close-btn');
+
+    if (!favStage || !favTilt || !favInner) return;
+
+    // Set default tanggal ke hari ini jika belum diisi
+    if (dateInput && !dateInput.value) {
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        dateInput.value = yyyy + '-' + mm + '-' + dd;
+    }
+
+    const spiceMessages = {
+        '0': 'Tim nggak pedes nih, yang penting pangsit & udangnya banyak 😋',
+        '1': 'Level kalem, manis-pedasnya pas kayak senyum kamu ✨',
+        '2': 'Pas banget! Nikmat & bikin senyum-senyum sendiri 🍜✨',
+        '3': 'Mulai menantang nih, siap-siap es pendamping di sebelah ya! 🧊',
+        '4+': 'Waduh kuat banget pedesnya! Jangan lupa minum air putih habis makan 🔥'
+    };
+
+    let selectedLevel = '2';
+    let treatCount = 0;
+
+    function toggleFlip(forceState) {
+        const shouldFlip = typeof forceState === 'boolean'
+            ? forceState
+            : !favInner.classList.contains('is-flipped');
+
+        favInner.classList.toggle('is-flipped', shouldFlip);
+        favTilt.style.transform = '';
+        if (favGlare) {
+            favGlare.style.setProperty('--glare-opacity', '0');
+        }
+    }
+
+    // Klik kartu untuk flip (hindari area tombol interaktif di sisi belakang)
+    favInner.addEventListener('click', function (e) {
+        if (e.target.closest('#fav-zoom-btn')) return;
+
+        const isFlipped = favInner.classList.contains('is-flipped');
+        if (!isFlipped) {
+            toggleFlip(true);
+        } else {
+            if (e.target.closest('.fav-control-group') || e.target.closest('.fav-order-area')) {
+                return;
+            }
+            toggleFlip(false);
+        }
+    });
+
+    // Aksesibilitas keyboard (Enter / Space)
+    favInner.addEventListener('keydown', function (e) {
+        if (e.target !== favInner) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleFlip();
+        }
+    });
+
+    if (favFlipBackBtn) {
+        favFlipBackBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            toggleFlip(false);
+        });
+    }
+
+    // Efek 3D Tilt & Kilau Holografik saat kursor bergerak (Desktop)
+    favStage.addEventListener('pointermove', function (e) {
+        if (e.pointerType !== 'mouse') return;
+
+        const rect = favStage.getBoundingClientRect();
+        const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+        const isFlipped = favInner.classList.contains('is-flipped');
+        const maxTilt = isFlipped ? 4 : 11;
+
+        const rotateX = (-ny * maxTilt).toFixed(2);
+        const rotateY = (nx * maxTilt).toFixed(2);
+
+        favTilt.style.transform =
+            'rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.015, 1.015, 1.015)';
+
+        if (favGlare && !isFlipped) {
+            const gx = (((e.clientX - rect.left) / rect.width) * 100).toFixed(1) + '%';
+            const gy = (((e.clientY - rect.top) / rect.height) * 100).toFixed(1) + '%';
+            favGlare.style.setProperty('--glare-x', gx);
+            favGlare.style.setProperty('--glare-y', gy);
+            favGlare.style.setProperty('--glare-opacity', '1');
+        }
+    });
+
+    favStage.addEventListener('pointerleave', function () {
+        favTilt.style.transform = '';
+        if (favGlare) {
+            favGlare.style.setProperty('--glare-opacity', '0');
+        }
+    });
+
+    function getSelectedToppings() {
+        return Array.from(toppingChips)
+            .filter(chip => chip.classList.contains('active'))
+            .map(chip => chip.getAttribute('data-topping'));
+    }
+
+    function formatIndonesianDate(isoDate) {
+        if (!isoDate) return 'Segera Dijadwalkan';
+        const parts = isoDate.split('-');
+        if (parts.length !== 3) return isoDate;
+        const dt = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+        if (isNaN(dt.getTime())) return isoDate;
+
+        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        return days[dt.getDay()] + ', ' + dt.getDate() + ' ' + months[dt.getMonth()] + ' ' + dt.getFullYear();
+    }
+
+    function getFormattedTime() {
+        const raw = timeInput && timeInput.value ? timeInput.value : '19:00';
+        return raw + ' WIB';
+    }
+
+    function renderReceiptModal() {
+        if (receiptDateVal) {
+            receiptDateVal.textContent = formatIndonesianDate(dateInput ? dateInput.value : '');
+        }
+        if (receiptTimeVal) {
+            receiptTimeVal.textContent = getFormattedTime();
+        }
+        if (receiptItemsList) {
+            receiptItemsList.innerHTML = '';
+            const items = ['1x Mie Gacoan (Level ' + selectedLevel + ')'];
+            getSelectedToppings().forEach(t => items.push('1x ' + t));
+
+            items.forEach(itemName => {
+                const row = document.createElement('div');
+                row.className = 'receipt-item-row';
+
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'receipt-item-name';
+                nameSpan.textContent = itemName;
+
+                const priceSpan = document.createElement('span');
+                priceSpan.className = 'receipt-item-price';
+                priceSpan.textContent = 'RP 0 (FREE)';
+
+                row.appendChild(nameSpan);
+                row.appendChild(priceSpan);
+                receiptItemsList.appendChild(row);
+            });
+        }
+    }
+
+    function openReceiptModal() {
+        renderReceiptModal();
+        if (receiptOverlay) {
+            receiptOverlay.classList.add('show-receipt');
+            receiptOverlay.setAttribute('aria-hidden', 'false');
+        }
+    }
+
+    function closeReceiptModal() {
+        if (receiptOverlay) {
+            receiptOverlay.classList.remove('show-receipt');
+            receiptOverlay.setAttribute('aria-hidden', 'true');
+        }
+    }
+
+    function updateOrderStatus() {
+        if (!favOrderStatus || treatCount === 0) return;
+
+        const toppings = getSelectedToppings();
+        const toppingText = toppings.length > 0
+            ? ' + ' + toppings.join(', ')
+            : ' (tanpa tambahan)';
+        const dateStr = formatIndonesianDate(dateInput ? dateInput.value : '');
+        const timeStr = getFormattedTime();
+
+        favOrderStatus.textContent =
+            'Nota siap! Mie Gacoan Lv ' + selectedLevel + toppingText +
+            ' (' + dateStr + ' • ' + timeStr + ') — tagih ke Mas Latif yaa 😘';
+        favOrderStatus.classList.add('show-status');
+        renderReceiptModal();
+    }
+
+    // Pilih Level Pedas
+    spiceButtons.forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            spiceButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            selectedLevel = this.getAttribute('data-level') || '2';
+            if (spiceReaction && spiceMessages[selectedLevel]) {
+                spiceReaction.textContent = spiceMessages[selectedLevel];
+            }
+            updateOrderStatus();
+        });
+    });
+
+    // Pilih Topping / Menu Pendamping
+    toppingChips.forEach(chip => {
+        chip.addEventListener('click', function (e) {
+            e.stopPropagation();
+            this.classList.toggle('active');
+            updateOrderStatus();
+        });
+    });
+
+    // Ledakan Emoji Lucu saat Klik Tombol Traktir
+    function spawnBurstEmojis() {
+        if (!favShowcase || !favTreatBtn) return;
+
+        const showcaseRect = favShowcase.getBoundingClientRect();
+        const btnRect = favTreatBtn.getBoundingClientRect();
+        const originX = btnRect.left - showcaseRect.left + btnRect.width / 2;
+        const originY = btnRect.top - showcaseRect.top + btnRect.height / 2;
+        const emojis = ['🍜', '🥟', '🌶️', '💛', '✨', '🍤'];
+
+        for (let i = 0; i < 14; i++) {
+            const el = document.createElement('span');
+            el.className = 'fav-burst-emoji';
+            el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+            const angle = (Math.PI * 2 * i) / 14 + (Math.random() * 0.4 - 0.2);
+            const distance = 65 + Math.random() * 85;
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance - 35;
+            const rot = Math.round(-60 + Math.random() * 120);
+
+            el.style.left = originX + 'px';
+            el.style.top = originY + 'px';
+            el.style.setProperty('--tx', tx.toFixed(1) + 'px');
+            el.style.setProperty('--ty', ty.toFixed(1) + 'px');
+            el.style.setProperty('--rot', rot + 'deg');
+
+            favShowcase.appendChild(el);
+            setTimeout(() => el.remove(), 950);
+        }
+    }
+
+    if (dateInput) {
+        dateInput.addEventListener('change', updateOrderStatus);
+    }
+    if (timeInput) {
+        timeInput.addEventListener('change', updateOrderStatus);
+    }
+
+    if (receiptCloseBtn) {
+        receiptCloseBtn.addEventListener('click', closeReceiptModal);
+    }
+    if (receiptOverlay) {
+        receiptOverlay.addEventListener('click', function (e) {
+            if (e.target === receiptOverlay) closeReceiptModal();
+        });
+    }
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && receiptOverlay && receiptOverlay.classList.contains('show-receipt')) {
+            closeReceiptModal();
+        }
+    });
+
+    if (favTreatBtn) {
+        favTreatBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            treatCount++;
+            this.classList.add('is-ordered');
+            this.textContent = '🧾 Lihat Nota Traktiran Mas Latif';
+
+            updateOrderStatus();
+            spawnBurstEmojis();
+            openReceiptModal();
+        });
+    }
+});
 
 // ==========================================
 // 2. FUNGSI KADO & PEMUTAR MUSIK LATAR
@@ -592,7 +875,15 @@ function toggleMusic() {
 
     if (!bgMusic) return;
 
-    if (bgMusic.paused) {
+    if (bgMusic.paused || bgMusic.muted) {
+        if (bgMusic.muted) {
+            document.querySelectorAll('.memory-video').forEach(v => {
+                v.muted = true;
+            });
+            const fsPlayer = document.getElementById('video-fs-player');
+            if (fsPlayer) fsPlayer.muted = true;
+            bgMusic.muted = false;
+        }
         bgMusic.play().catch(console.error);
         iconPlay.style.display = 'none';
         iconPause.style.display = 'block';
@@ -1233,3 +1524,249 @@ function buatConfetti() {
     // Gelombang 3: Hujan confetti lanjutan
     setTimeout(() => burstWave(40, 0), 2000);
 }
+
+// ==========================================
+// VIDEO MEMORIES (AUTO-MUTE, UNMUTE SYNC BACKSOUND & FULLSCREEN)
+// ==========================================
+document.addEventListener('DOMContentLoaded', function () {
+    const videoCards = document.querySelectorAll('.video-card');
+    const videos = Array.from(document.querySelectorAll('.memory-video'));
+    const bgMusic = document.getElementById('bg-music');
+    const fsModal = document.getElementById('video-fullscreen-modal');
+    const fsPlayer = document.getElementById('video-fs-player');
+    const fsCloseBtn = document.getElementById('video-fs-close');
+
+    if (videos.length === 0) return;
+
+    let activeSourceVideo = null;
+
+    function syncBacksoundMute() {
+        if (!bgMusic) return;
+        const fsActive = fsModal && fsModal.classList.contains('active');
+        const anyInlineUnmuted = videos.some(v => !v.muted);
+        const fsUnmuted = fsActive && fsPlayer && !fsPlayer.muted;
+        bgMusic.muted = anyInlineUnmuted || fsUnmuted;
+    }
+
+    function updateCardButtons(card, video) {
+        const muteBtn = card.querySelector('.video-mute-btn');
+        const playBtn = card.querySelector('.video-play-btn');
+
+        if (muteBtn) {
+            const isMuted = video.muted;
+            muteBtn.classList.toggle('is-unmuted', !isMuted);
+            muteBtn.textContent = isMuted ? '🔇 Muted' : '🔊 Suara';
+            muteBtn.setAttribute('aria-label', isMuted ? 'Nyalakan suara video' : 'Bisukan video');
+        }
+
+        if (playBtn) {
+            const isPaused = video.paused;
+            playBtn.textContent = isPaused ? '▶' : '⏸';
+            playBtn.setAttribute('aria-label', isPaused ? 'Putar video' : 'Jeda video');
+        }
+    }
+
+    function syncVideoAspect(card, video) {
+        const frame = card.querySelector('.video-frame');
+        if (!frame || !video.videoWidth || !video.videoHeight) return;
+
+        frame.style.aspectRatio = video.videoWidth + ' / ' + video.videoHeight;
+        const isPortrait = video.videoHeight > video.videoWidth;
+        card.classList.toggle('video-card-portrait', isPortrait);
+        card.classList.toggle('video-card-landscape', !isPortrait);
+    }
+
+    function openFallbackModal(video) {
+        if (!fsModal || !fsPlayer) return;
+        const sourceEl = video.querySelector('source');
+        const src = video.currentSrc || (sourceEl ? sourceEl.getAttribute('src') : '');
+        if (!src) return;
+
+        activeSourceVideo = video;
+        const wasMuted = video.muted;
+        const currentTime = video.currentTime || 0;
+
+        video.pause();
+        fsPlayer.src = src;
+        fsPlayer.muted = wasMuted;
+        fsModal.classList.add('active');
+        fsModal.setAttribute('aria-hidden', 'false');
+
+        const startAtTime = () => {
+            try { fsPlayer.currentTime = currentTime; } catch (e) {}
+            fsPlayer.play().catch(() => {});
+        };
+
+        if (fsPlayer.readyState >= 1) {
+            startAtTime();
+        } else {
+            fsPlayer.addEventListener('loadedmetadata', startAtTime, { once: true });
+        }
+
+        syncBacksoundMute();
+    }
+
+    function closeFallbackModal() {
+        if (!fsModal || !fsPlayer || !fsModal.classList.contains('active')) return;
+
+        const targetVideo = activeSourceVideo;
+        const resumeTime = fsPlayer.currentTime || 0;
+        const isMutedInModal = fsPlayer.muted;
+
+        fsPlayer.pause();
+        fsPlayer.removeAttribute('src');
+        fsPlayer.load();
+        fsModal.classList.remove('active');
+        fsModal.setAttribute('aria-hidden', 'true');
+        activeSourceVideo = null;
+
+        if (targetVideo) {
+            targetVideo.muted = isMutedInModal;
+            try { targetVideo.currentTime = resumeTime; } catch (e) {}
+            targetVideo.play().catch(() => {});
+            const card = targetVideo.closest('.video-card');
+            if (card) updateCardButtons(card, targetVideo);
+        }
+
+        syncBacksoundMute();
+    }
+
+    if (fsCloseBtn) {
+        fsCloseBtn.addEventListener('click', closeFallbackModal);
+    }
+    if (fsModal) {
+        fsModal.addEventListener('click', function (e) {
+            if (e.target === fsModal) closeFallbackModal();
+        });
+    }
+    if (fsPlayer) {
+        fsPlayer.addEventListener('volumechange', syncBacksoundMute);
+    }
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && fsModal && fsModal.classList.contains('active')) {
+            closeFallbackModal();
+        }
+    });
+
+    videoCards.forEach(card => {
+        const video = card.querySelector('.memory-video');
+        const playBtn = card.querySelector('.video-play-btn');
+        const muteBtn = card.querySelector('.video-mute-btn');
+        const fsBtn = card.querySelector('.video-fullscreen-btn');
+        if (!video) return;
+
+        // Pastikan otomatis termute sejak awal
+        video.defaultMuted = true;
+        video.muted = true;
+        updateCardButtons(card, video);
+
+        if (video.readyState >= 1) {
+            syncVideoAspect(card, video);
+        } else {
+            video.addEventListener('loadedmetadata', () => syncVideoAspect(card, video));
+        }
+
+        // Klik video untuk play/pause
+        video.addEventListener('click', () => {
+            if (video.paused) {
+                video.play().catch(() => {});
+            } else {
+                video.pause();
+            }
+        });
+
+        if (playBtn) {
+            playBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (video.paused) {
+                    video.play().catch(() => {});
+                } else {
+                    video.pause();
+                }
+            });
+        }
+
+        if (muteBtn) {
+            muteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const willUnmute = video.muted;
+                if (willUnmute) {
+                    // Mute video lain agar suara tidak bertabrakan
+                    videos.forEach(other => {
+                        if (other !== video) {
+                            other.muted = true;
+                        }
+                    });
+                    video.muted = false;
+                    if (video.paused) {
+                        video.play().catch(() => {});
+                    }
+                } else {
+                    video.muted = true;
+                }
+                videoCards.forEach(c => {
+                    const v = c.querySelector('.memory-video');
+                    if (v) updateCardButtons(c, v);
+                });
+                syncBacksoundMute();
+            });
+        }
+
+        if (fsBtn) {
+            fsBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                video.controls = true;
+
+                if (video.requestFullscreen) {
+                    video.requestFullscreen().catch(() => {
+                        video.controls = false;
+                        openFallbackModal(video);
+                    });
+                } else if (video.webkitRequestFullscreen) {
+                    video.webkitRequestFullscreen();
+                } else if (video.webkitEnterFullscreen) {
+                    video.webkitEnterFullscreen();
+                } else {
+                    video.controls = false;
+                    openFallbackModal(video);
+                }
+            });
+        }
+
+        video.addEventListener('play', () => updateCardButtons(card, video));
+        video.addEventListener('pause', () => updateCardButtons(card, video));
+        video.addEventListener('volumechange', () => {
+            updateCardButtons(card, video);
+            syncBacksoundMute();
+        });
+        video.addEventListener('webkitendfullscreen', () => {
+            video.controls = false;
+            updateCardButtons(card, video);
+            syncBacksoundMute();
+        });
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+        const fsElement = document.fullscreenElement;
+        videos.forEach(video => {
+            if (fsElement !== video) {
+                video.controls = false;
+            }
+            const card = video.closest('.video-card');
+            if (card) updateCardButtons(card, video);
+        });
+        syncBacksoundMute();
+    });
+
+    document.addEventListener('webkitfullscreenchange', () => {
+        const fsElement = document.webkitFullscreenElement;
+        videos.forEach(video => {
+            if (fsElement !== video) {
+                video.controls = false;
+            }
+            const card = video.closest('.video-card');
+            if (card) updateCardButtons(card, video);
+        });
+        syncBacksoundMute();
+    });
+});

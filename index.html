@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Happy Birthday Cintaku Niken Aulia!</title>
+    <title>Happy Birthday My Love Haniyeh!</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Outfit:wght@300;400;600&display=swap"
         rel="stylesheet">
@@ -18,7 +18,7 @@
 
     <div id="music-popup" class="music-popup">
         <p class="now-playing-top">Now Playing</p>
-        <img src="img/beautiful.jpeg" alt="Album Cover" class="album-cover">
+        <img src="img/6.jpeg" alt="Album Cover" class="album-cover">
         <div class="music-info">
             <p class="song-title">Shape Of My Heart</p>
             <p class="artist-name">Backstreet Boys</p>
@@ -84,7 +84,7 @@
             <h1 class="aesthetic-font fade-in-text">Happy Birthday,<br>My Everything</h1>
             <p class="aesthetic-font fade-in-text"
                 style="font-size: 1.3rem; color: #8a7200; margin-top: 10px; margin-bottom: 10px; letter-spacing: 2px;">-
-                Niken Aulia -</p>
+                Haniyeh -</p>
             <img src="img/foto-pacar.png" alt="Foto Pacar" class="birthday-photo fade-in-text">
             <p class="typing-text">Hari ini adalah hari yang paling spesial karena di hari ini, semesta membawa kamu ke
                 dunia.</p>
@@ -109,48 +109,126 @@
                 satu hal yang paling berarti bagiku.</p>
         </section>
 
-        <section class="slide photo-panel show-on-scroll">
-            <h2 class="aesthetic-font"
-                style="line-height: 0.8; margin-bottom: -15px; position: relative; top: 15px; color: #e6a800;">
-                <span style="font-size: 2em; display: block;">The little things</span>
-                <span
-                    style="font-size: 1.2em; display: block; opacity: 0.9; transform: translateX(40px); color: #5a4500;">i
-                    know about
-                    you</span>
+        <section class="slide photo-panel show-on-scroll fav-section">
+            <h2 class="aesthetic-font fav-heading">
+                <span class="fav-heading-main">The little things</span>
+                <span class="fav-heading-sub">i know about you</span>
             </h2>
 
-            <div class="solar-system">
-                <div class="orbit-track">
+            <div class="fav-showcase" id="fav-showcase">
+                <!-- Dekorasi ikon mengambang di sekitar kartu -->
+                <div class="fav-ambient-icons" aria-hidden="true">
+                    <span class="ambient-icon icon-1">🍜</span>
+                    <span class="ambient-icon icon-2">🌶️</span>
+                    <span class="ambient-icon icon-3">✨</span>
+                    <span class="ambient-icon icon-4">🥟</span>
+                    <span class="ambient-icon icon-5">💛</span>
+                </div>
 
-                    <div class="planet-card item1" data-caption="Seblak">
-                        <img src="img/favorite-food.jpg" alt="Food">
-                        <p class="planet-caption">Your favorite food</p>
+                <!-- Stage 3D untuk Kartu Mie Gacoan -->
+                <div class="fav-card-stage" id="fav-card-stage">
+                    <div class="fav-card-tilt" id="fav-card-tilt">
+                        <div class="fav-card-inner" id="fav-card-inner" role="button" tabindex="0"
+                            aria-label="Kartu makanan favorit Mie Gacoan, ketuk untuk membalik">
+
+                            <!-- SISI DEPAN KARTU -->
+                            <div class="fav-card-face fav-card-front">
+                                <div class="fav-card-glare" id="fav-card-glare" aria-hidden="true"></div>
+
+                                <div class="fav-front-top">
+                                    <span class="fav-badge">👑 No. 1 Favorite</span>
+                                    <button type="button" class="fav-zoom-btn" id="fav-zoom-btn"
+                                        aria-label="Perbesar foto Mie Gacoan" title="Perbesar foto">
+                                        🔍
+                                    </button>
+                                </div>
+
+                                <div class="fav-photo-wrapper">
+                                    <img src="img/favorite-food.jpg" alt="Mie Gacoan" class="fav-photo">
+                                    <span class="fav-food-chip">🍜 Comfort Food</span>
+                                </div>
+
+                                <div class="fav-front-footer">
+                                    <p class="fav-label">Your favorite food</p>
+                                    <h3 class="aesthetic-font fav-title">Mie Gacoan</h3>
+                                    <p class="fav-tap-cue">
+                                        <span class="tap-pulse-dot" aria-hidden="true"></span>
+                                        Ketuk kartu untuk buka kejutan ↻
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- SISI BELAKANG KARTU (INTERAKTIF) -->
+                            <div class="fav-card-face fav-card-back">
+                                <div class="fav-back-top">
+                                    <span class="fav-badge">🍜 Special Order</span>
+                                    <button type="button" class="fav-flip-back-btn" id="fav-flip-back-btn"
+                                        aria-label="Balik kembali ke foto">
+                                        ↻ Foto
+                                    </button>
+                                </div>
+
+                                <div class="fav-back-header">
+                                    <h3 class="aesthetic-font fav-back-title">Mie Gacoan Date!</h3>
+                                </div>
+
+                                <!-- Pilih Level Pedas -->
+                                <div class="fav-control-group">
+                                    <p class="fav-control-label">🌶️ Mau level pedas berapa?</p>
+                                    <div class="spice-levels" id="spice-levels">
+                                        <button type="button" class="spice-btn" data-level="0">Lv 0</button>
+                                        <button type="button" class="spice-btn" data-level="1">Lv 1</button>
+                                        <button type="button" class="spice-btn active" data-level="2">Lv 2</button>
+                                        <button type="button" class="spice-btn" data-level="3">Lv 3</button>
+                                        <button type="button" class="spice-btn" data-level="4+">Lv 4+</button>
+                                    </div>
+                                    <p class="spice-reaction" id="spice-reaction">
+                                        Pas banget! Nikmat & bikin senyum-senyum sendiri 🍜✨
+                                    </p>
+                                </div>
+
+                                <!-- Pilih Menu Pendamping -->
+                                <div class="fav-control-group">
+                                    <p class="fav-control-label">🥟 Tambah temen makannya:</p>
+                                    <div class="topping-chips" id="topping-chips">
+                                        <button type="button" class="topping-chip active" data-topping="Udang Keju">🥟
+                                            Udang Keju</button>
+                                        <button type="button" class="topping-chip" data-topping="Udang Rambutan">🍤
+                                            Udang Rambutan</button>
+                                        <button type="button" class="topping-chip" data-topping="Siomay">🍥
+                                            Siomay</button>
+                                        <button type="button" class="topping-chip" data-topping="Es Gobak Sodor">🧋 Es
+                                            Gobak Sodor</button>
+                                    </div>
+                                </div>
+
+                                <!-- Pilih Tanggal & Jam Gacoan Date -->
+                                <div class="fav-control-group">
+                                    <p class="fav-control-label">📅 Pilih tanggal & jam Gacoan Date:</p>
+                                    <div class="gacoan-schedule-row">
+                                        <label class="gacoan-input-wrap" aria-label="Tanggal Gacoan Date">
+                                            <span class="gacoan-input-icon">🗓️</span>
+                                            <input type="date" id="gacoan-date" class="gacoan-datetime-input">
+                                        </label>
+                                        <label class="gacoan-input-wrap" aria-label="Jam Gacoan Date">
+                                            <span class="gacoan-input-icon">⏰</span>
+                                            <input type="time" id="gacoan-time" class="gacoan-datetime-input"
+                                                value="19:00">
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Tombol Kode Traktir -->
+                                <div class="fav-order-area">
+                                    <button type="button" class="fav-treat-btn" id="fav-treat-btn">
+                                        💌 Kodein Mas Latif Traktir!
+                                    </button>
+                                    <p class="fav-order-status" id="fav-order-status" aria-live="polite"></p>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
-
-                    <div class="planet-card item2" data-caption="Moccacino">
-                        <img src="img/favorite-drink.jpg" alt="Drink">
-                        <p class="planet-caption">Your favorite drink</p>
-                    </div>
-
-                    <div class="planet-card item3"
-                        data-embed="https://open.spotify.com/embed/track/2d49CYzYWkjPawTzcR7Z5z?utm_source=generator&si=d797c2a403634d17"
-                        data-caption="Abadi (Indo Version) - Dendi Nata">
-                        <img src="img/favorite-song.jpg" alt="Song">
-                        <p class="planet-caption">Your favorite song</p>
-                    </div>
-
-                    <div class="planet-card item4"
-                        data-embed="https://www.youtube.com/embed/LH3Sy5s7_XU?si=TZRlyhmpxDEh1jHb"
-                        data-caption="Nadia Omara">
-                        <img src="img/favorite-yt.jpg" alt="YouTube">
-                        <p class="planet-caption">Your favorite youtube channel</p>
-                    </div>
-
-                    <div class="planet-card item5" data-caption="Marsel">
-                        <img src="img/favorite-person.jpeg" alt="Person">
-                        <p class="planet-caption">Your favorite person</p>
-                    </div>
-
                 </div>
             </div>
         </section>
@@ -196,6 +274,68 @@
             </div>
         </section>
 
+        <section class="slide photo-panel show-on-scroll video-memories-section">
+            <h2 class="aesthetic-font video-heading">
+                <span class="video-heading-main">Our Special Moments</span>
+                <span class="video-heading-sub">in motion</span>
+            </h2>
+
+            <div class="video-memories-list">
+                <!-- Video 1 (Landscape) -->
+                <div class="video-card video-card-landscape">
+                    <div class="video-frame" style="aspect-ratio: 816 / 464;">
+                        <video class="memory-video" autoplay muted loop playsinline preload="metadata">
+                            <source src="video/1.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-controls-bar">
+                            <button type="button" class="video-ctrl-btn video-play-btn" aria-label="Jeda video"
+                                title="Play / Pause">
+                                ⏸
+                            </button>
+                            <div class="video-ctrl-right">
+                                <button type="button" class="video-ctrl-btn video-mute-btn"
+                                    aria-label="Nyalakan suara video" title="Unmute / Mute">
+                                    🔇 Muted
+                                </button>
+                                <button type="button" class="video-ctrl-btn video-fullscreen-btn"
+                                    aria-label="Perbesar video layar penuh" title="Fullscreen">
+                                    ⛶
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video 2 (Portrait) -->
+                <div class="video-card video-card-portrait">
+                    <div class="video-frame" style="aspect-ratio: 576 / 1024;">
+                        <video class="memory-video" autoplay muted loop playsinline preload="metadata">
+                            <source src="video/2.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-controls-bar">
+                            <button type="button" class="video-ctrl-btn video-play-btn" aria-label="Jeda video"
+                                title="Play / Pause">
+                                ⏸
+                            </button>
+                            <div class="video-ctrl-right">
+                                <button type="button" class="video-ctrl-btn video-mute-btn"
+                                    aria-label="Nyalakan suara video" title="Unmute / Mute">
+                                    🔇 Muted
+                                </button>
+                                <button type="button" class="video-ctrl-btn video-fullscreen-btn"
+                                    aria-label="Perbesar video layar penuh" title="Fullscreen">
+                                    ⛶
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="video-hint">🔇 Ketuk 🔊 untuk dengar suara video (backsound otomatis senyap sementara) atau ⛶
+                untuk layar penuh</p>
+        </section>
+
         <section class="slide photo-panel show-on-scroll">
             <div class="polaroid-grid">
                 <div class="polaroid">
@@ -207,12 +347,16 @@
                     <p class="caption">Are</p>
                 </div>
                 <div class="polaroid">
-                    <img src="img/so.jpeg" alt="Foto Pribadi 3">
-                    <p class="caption">So</p>
+                    <img src="img/the most.jpeg" alt="Foto Pribadi 3">
+                    <p class="caption">The Most</p>
                 </div>
                 <div class="polaroid">
                     <img src="img/beautiful.jpeg" alt="Foto Pribadi 4">
-                    <p class="caption">Beautiful</p>
+                    <p class="caption">Beautiful Girl</p>
+                </div>
+                <div class="polaroid">
+                    <img src="img/in my mine.jpeg" alt="Foto Pribadi 5">
+                    <p class="caption">In My Mine</p>
                 </div>
             </div>
         </section>
@@ -234,7 +378,7 @@
             <hr style="border: 0; border-top: 1px solid rgba(230, 168, 0, 0.3); margin-bottom: 20px;">
             <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 5px;">Dari orang yang paling bersyukur memilikimu,
             </p>
-            <p class="sender-name aesthetic-font baby-pink-text" style="font-size: 2rem; margin-top: 5px;">Marsel</p>
+            <p class="sender-name aesthetic-font baby-pink-text" style="font-size: 2rem; margin-top: 5px;">Latif</p>
 
             <!-- Tombol Tiup Lilin -->
             <button id="btn-tiup-lilin" class="btn-tiup-lilin" onclick="bukaHalamanLilin()">🎂 Tiup Lilin</button>
@@ -266,7 +410,7 @@
                                 <div class="flame-inner"></div>
                             </div>
                             <div class="candle-number-body">
-                                <span class="candle-digit">8</span>
+                                <span class="candle-digit">7</span>
                             </div>
                         </div>
                     </div>
@@ -305,6 +449,96 @@
                 loading="lazy"></iframe>
 
             <p id="modal-caption" class="aesthetic-font"></p>
+        </div>
+
+        <!-- Fallback Fullscreen Video Modal -->
+        <div id="video-fullscreen-modal" class="video-fullscreen-modal" aria-hidden="true">
+            <button type="button" id="video-fs-close" class="video-fs-close" aria-label="Tutup layar penuh">✕
+                Tutup</button>
+            <video id="video-fs-player" class="video-fs-player" controls playsinline loop></video>
+        </div>
+
+        <!-- Modal Nota / Struk Traktiran Mie Gacoan -->
+        <div id="gacoan-receipt-overlay" class="gacoan-receipt-overlay" aria-hidden="true">
+            <div class="gacoan-receipt-wrapper">
+                <div class="gacoan-receipt-card" id="gacoan-receipt-card">
+                    <div class="receipt-top-edge" aria-hidden="true"></div>
+
+                    <div class="receipt-header">
+                        <p class="receipt-brand">🍜 MIE GACOAN DATE</p>
+                        <p class="receipt-sub">BIRTHDAY TREAT OFFICIAL RECEIPT</p>
+                        <p class="receipt-no" id="receipt-no">NO. NOTA: #HNY-17BDAY</p>
+                    </div>
+
+                    <div class="receipt-divider"></div>
+
+                    <div class="receipt-meta">
+                        <div class="receipt-meta-row">
+                            <span>UNTUK</span>
+                            <strong>Haniyeh 👑</strong>
+                        </div>
+                        <div class="receipt-meta-row">
+                            <span>DITAGIH KE</span>
+                            <strong>Mas Latif 💛</strong>
+                        </div>
+                        <div class="receipt-meta-row">
+                            <span>TANGGAL DATE</span>
+                            <strong id="receipt-date-val">-</strong>
+                        </div>
+                        <div class="receipt-meta-row">
+                            <span>JAM DATE</span>
+                            <strong id="receipt-time-val">19:00 WIB</strong>
+                        </div>
+                    </div>
+
+                    <div class="receipt-divider"></div>
+
+                    <div class="receipt-items-header">
+                        <span>ITEM PESANAN</span>
+                        <span>HARGA</span>
+                    </div>
+
+                    <div class="receipt-items-list" id="receipt-items-list">
+                        <!-- Diisi otomatis via JS -->
+                    </div>
+
+                    <div class="receipt-divider"></div>
+
+                    <div class="receipt-totals">
+                        <div class="receipt-total-row">
+                            <span>SUBTOTAL</span>
+                            <span>DITANGGUNG MAS LATIF</span>
+                        </div>
+                        <div class="receipt-total-row receipt-grand-total">
+                            <span>BAYAR HANIYEH</span>
+                            <span>RP 0 (FREE)</span>
+                        </div>
+                        <div class="receipt-total-row">
+                            <span>METODE BAYAR</span>
+                            <span>Senyum Manis Haniyeh ✨</span>
+                        </div>
+                    </div>
+
+                    <div class="receipt-stamp-wrap">
+                        <span class="receipt-stamp">LUNAS • TRAKTIRAN MAS LATIF</span>
+                    </div>
+
+                    <div class="receipt-barcode-box" aria-hidden="true">
+                        <div class="receipt-barcode"></div>
+                        <p class="receipt-barcode-text">*HANIYEH-GAC0AN-DATE*</p>
+                    </div>
+
+                    <p class="receipt-footer-note">
+                        📸 Screenshot nota ini & kirim ke Mas Latif buat klaim Gacoan Date kamu yaa!
+                    </p>
+
+                    <div class="receipt-bottom-edge" aria-hidden="true"></div>
+                </div>
+
+                <button type="button" class="receipt-close-btn" id="receipt-close-btn">
+                    ✕ Tutup / Ubah Pesanan
+                </button>
+            </div>
         </div>
 
     </div>
